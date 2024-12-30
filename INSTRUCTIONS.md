@@ -19,6 +19,7 @@ Between the __START and __END lines, create your cast by repeating the format be
 
 You're done with your input document now.
 
+
 **advantage_roll.cpp main int() Customization**
 
 Open up advantage_roll.cpp and head to int main(). As soon as you're there, you'll be met with most of the things you can customize.
@@ -30,3 +31,14 @@ After that, there's vector<vector<string>> Advantage_Types. New advantages shoul
 Lastly, there's the desperation map. Here, you can create custom tier names and set their values. For example, if you want a tier named "AMAZING" and have its value be 5, you can add {"AMAZING", 5} into the map. **Be sure not to forget the comma at the end if this tier isn't the last one listed!**
 
 
+**Formula Customization**
+
+_Note: The variables seen below do not share the same names as the ones in the actual program. This is just a demonstration of my formula._
+The formula that I created for this program is ((r + 1) ^ 2) / (d * ((f + 1) ^ 2) * (0.25 ^ (0.25t))), with both sides of the calculated fraction multiplied by 1000 then rounded to the nearest integer.
+
+r = The amount of real clues a contestant is currently using. This increases the chance of the idol being found by the user.
+d = The base denominator. Each advantage has its own d value. This means that, assuming any given contestant has no chance modifiers of any kind, they have a 1 in d chance of finding the advantage the d value represents.
+f = The amount of fake clues a contestant is currently using. This decreases the chance of the idol being found by the user.
+t = The desperation tier a contestant has at that moment. The values for each tier are listed besides their titles.
+
+If you press ctrl + f and type in "CUSTOM", you will see 2 results located in the Chance_Retriever function. This is where you want to be if you want to change the formula for the fractions' numerators and/or denominators. The program itself has explanations for the variables, functions, etc. you'll see in there and even provides 2 examples of custom formulas.
