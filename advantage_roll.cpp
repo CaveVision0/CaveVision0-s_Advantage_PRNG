@@ -383,14 +383,36 @@ int main(){
     
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
-
+    
+    /*
+    DEFAULT:
+        string Input = "ExampleCast.txt";
+        string Output = "ExampleResult.txt";
+    */
+   // Input and output files.
     string Input = "ExampleCast.txt";
     string Output = "ExampleResult.txt";
-    
-    // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
+
+    /*
+    DEFAULT:
+        vector<vector<string>> Advantage_Types = {{"Immunity Idol", "100"}, {"Vote Pass", "50"}};
+    */
+   // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
     vector<vector<string>> Advantage_Types = {{"Immunity Idol", "100"}, {"Vote Pass", "50"}}; // Advantage and base denominator list.
-    
+
+    /*
+    DEFAULT:
+        map<string, int> Desperation = {
+            {"Occupied", -2147483648},
+            {"Comfy", 0},
+            {"Unbothered", 1},
+            {"Concerned", 2},
+            {"Worried", 3},
+            {"Desperate", 4}
+        };
+    */
     // Dictionary that maps the desperation tiers (2nd row of each contestant's slot in the input file) to integers.
+    // Base denominator will remain as the denominator post-calculations if a character has desperation tier 0 ("Comfy") and no clues.
     map<string, int> Desperation = {
         {"Occupied", -2147483648},
         {"Comfy", 0},
@@ -400,9 +422,12 @@ int main(){
         {"Desperate", 4}
     };
 
+    /*
+    DEFAULT:
+        int PPRNG_Seed = 010101;
+    */
     int PPRNG_Seed = 010101;
-
-    // If you want to customize the math formula used for the RNG chances, that's in the function "Chance_Retriever."
+    // If you want to customize the math formula used for the RNG chances, that's in the function "Chance_Retriever." Press ctrl + f and type "CUSTOM."
 
     // STUFF FOR YOU TO CUSTOMIZE ABOVE!!!
     // STUFF FOR YOU TO CUSTOMIZE ABOVE!!!
