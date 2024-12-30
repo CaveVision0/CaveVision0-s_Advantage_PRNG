@@ -11,6 +11,7 @@
 #include<vector> // Used for vectors.
 #include<random> // Used for the PRNG.
 #include<ctime> // Used for the PRNG's seeding.
+#include<tuple> // Used for the PRNG's seeding.
 
 using namespace std;
 
@@ -19,9 +20,9 @@ using namespace std;
 // The RTF will acknowledge if more than one person finds an advantage.
 // RTF text formatting.
 
-vector<vector<string>> Contestant_Handler(vector<vector<string>> CS, vector<vector<unsigned int>> CC, unsigned int SS, map<string, int> D, string I){
+vector<tuple<string, float, string>> Contestant_Handler(vector<tuple<string, float, string>> CS, vector<vector<unsigned int>> CC, unsigned int SS, map<string, float> D, string I){
     string line;
-    vector<string> Stats_Pusher = {}; // Used to push the contestant stat subvectors into the main vector.
+    tuple<string, int, string> Stats_Pusher; // Used to push the contestant stat subvectors into the main vector.
     bool Counting = false; // Whether or not Counter is actually counting.
     unsigned int Counter = 0; // Counts up once per non-empty line. Used to know when to begin a new slot.
 
@@ -30,7 +31,7 @@ vector<vector<string>> Contestant_Handler(vector<vector<string>> CS, vector<vect
     
     // If the list can't open, the string listed in the loop will print out and nothing will be returned.
     if(!Contestant_List){
-        cout << "CAN'T OPEN!!!!!";
+        cout << "CAN'T OPEN INPUT!!!!!";
         return CS;
     }
 
@@ -52,24 +53,24 @@ vector<vector<string>> Contestant_Handler(vector<vector<string>> CS, vector<vect
 
         // Name detector. Slot #1 of the Contestant_Stats sub-vector (or whatever it's called, I'm tired).
         if(Counter % SS == 1 && !line.empty()){
-            Stats_Pusher.push_back(line);
+            get<0>(Stats_Pusher) = line;
         }
 
         // Desperation tier detector. Slot #2 of the aforementioned sub-vectors.
         else if(Counter % SS == 2 && !line.empty()){ 
             // Exception handling for invalid desperation tiers. Invalid tiers become "Unbothered" (AKA 1).
             try{
-                Stats_Pusher.push_back(to_string(D.at(line)));
+                get<1>(Stats_Pusher) = D.at(line);
             }
             catch(const out_of_range& ex){
-                Stats_Pusher.push_back("1");
-                cout << "Conversion Error: " << Stats_Pusher.at(0) << " has an invalid desperation tier! Invalid tier will be automatically replaced with \"Unbothered\" (AKA 1). All clue counts are set to 0 as well." << endl;
+                get<1>(Stats_Pusher) = 1;
+                cout << "Conversion Error: " << get<0>(Stats_Pusher) << " has an invalid desperation tier! Invalid tier will be automatically replaced with \"Unbothered\" (AKA 1). All clue counts are set to 0 as well." << endl;
             }
         }
 
         // Team detector. Slot #3 of the aforementioned sub-vectors.
         else if(Counter % SS == 3 && !line.empty()){
-            Stats_Pusher.push_back(line);
+            get<2>(Stats_Pusher) = line;
             CS.push_back(Stats_Pusher);
             Stats_Pusher = {};
         }
@@ -79,13 +80,13 @@ vector<vector<string>> Contestant_Handler(vector<vector<string>> CS, vector<vect
             
             // Sets the default desperation tier to "Unbothered" if a slot cuts off after the name.
             if(Counter % SS == 1){
-                Stats_Pusher.push_back("1");
-                Stats_Pusher.push_back("No Team");
+                get<1>(Stats_Pusher) = 1;
+                get<2>(Stats_Pusher) = "No Team";
                 CS.push_back(Stats_Pusher);
                 Stats_Pusher = {};
             }
             else if(Counter % SS == 2){
-                Stats_Pusher.push_back("No Team");
+                get<2>(Stats_Pusher) = "No Team";
                 CS.push_back(Stats_Pusher);
                 Stats_Pusher = {};
             }
@@ -100,7 +101,7 @@ vector<vector<string>> Contestant_Handler(vector<vector<string>> CS, vector<vect
     return CS;
 }
 
-vector<vector<unsigned int>> Clue_Handler(vector<vector<string>> CS, vector<vector<unsigned int>> CC, unsigned int SS, string I){
+vector<vector<unsigned int>> Clue_Handler(vector<tuple<string, float, string>> CS, vector<vector<unsigned int>> CC, unsigned int SS, string I){
     string line;
     vector<unsigned int> Clues_Pusher = {}; // Used to push the clue counter subvectors into the main vector.
     bool Counting = false; // Whether or not Counter is actually counting.
@@ -112,7 +113,7 @@ vector<vector<unsigned int>> Clue_Handler(vector<vector<string>> CS, vector<vect
     
     // If the list can't open, the string listed in the loop will print out and nothing will be returned.
     if(!Contestant_List){
-        cout << "CAN'T OPEN!!!!!";
+        cout << "CAN'T OPEN INPUT!!!!!";
         return CC;
     }
 
@@ -141,11 +142,11 @@ vector<vector<unsigned int>> Clue_Handler(vector<vector<string>> CS, vector<vect
                 Clues_Pusher.push_back(stoul(line));
             }
             catch(const invalid_argument& ex){
-                cout << "Conversion Error: " << CS.at(ID - 1).at(0) << " has at least 1 non-integer clue counter! Invalid slot(s) will be automatically filled with 0s." << endl;
+                cout << "Conversion Error: " << get<0>(CS.at(ID - 1)) << " has at least 1 non-integer clue counter! Invalid slot(s) will be automatically filled with 0s." << endl;
                 Clues_Pusher.push_back(0);
             }
             catch(const out_of_range& ex){
-                cout << "Conversion Error: " << CS.at(ID - 1).at(0) << " has at least 1 clue counter that's out of range! Invalid slot(s) will be automatically filled with 0s." << endl;
+                cout << "Conversion Error: " << get<0>(CS.at(ID - 1)) << " has at least 1 clue counter that's out of range! Invalid slot(s) will be automatically filled with 0s." << endl;
                 Clues_Pusher.push_back(0);
             }
         }
@@ -178,27 +179,26 @@ vector<vector<unsigned int>> Clue_Handler(vector<vector<string>> CS, vector<vect
    return CC;
 }
 
-vector<vector<vector<unsigned int>>> Chance_Retriever(vector<vector<string>> AT, vector<vector<string>> CS, vector<vector<unsigned int>> CC, vector<vector<vector<unsigned int>>> F){
+tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> Chance_Retriever(vector<tuple<string, float>> AT, vector<tuple<string, float, string>> CS, vector<vector<unsigned int>> CC, tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> F){
     vector<unsigned int> Base_Denominator; // Base denominator for each advantage.
-    vector<vector<unsigned int>> True_Numerator; // The numerator in the finished fraction.
-    vector<vector<unsigned int>> True_Denominator; // The denominator in the finished fraction.
+    vector<vector<unsigned int>> True_Numerator; // The numerator in the finished fractions.
+    vector<vector<unsigned int>> True_Denominator; // The denominator in the finished fractions.
     vector<unsigned int> Numerator_Pusher;
     vector<unsigned int> Denominator_Pusher;
     int Factor; // Used to simplify fractions.
     int x;
 
     // Converts the base denominator slots from int main()'s vectors into integers. Includes exception handling which defaults to 100.
-
     for(int i = 0; i < AT.size(); ++i){
         try{
-            Base_Denominator.push_back(stod(AT.at(i).at(1)));
+            Base_Denominator.push_back(get<1>(AT.at(i)));
         }
         catch(const invalid_argument& ex){
-            cout << "Conversion Error: " << AT.at(i).at(0) << "'s base denominator isn't an integer! Defaulting to 100." << endl;
+            cout << "Conversion Error: " << get<0>(AT.at(i)) << "'s base denominator isn't an integer! Defaulting to 100." << endl;
             Base_Denominator.push_back(100);
         }
         catch(const out_of_range& ex){
-            cout << "Conversion Error: " << AT.at(i).at(0) << "'s base denominator is out of range! Defaulting to 100." << endl;
+            cout << "Conversion Error: " << get<0>(AT.at(i)) << "'s base denominator is out of range! Defaulting to 100." << endl;
             Base_Denominator.push_back(100);
         }
         
@@ -221,8 +221,7 @@ vector<vector<vector<unsigned int>>> Chance_Retriever(vector<vector<string>> AT,
                     // 2*i consists of real clues of advantage i.
                     // (2*i) + 1 consist of fake ones of advantage i.
                 // Base_Denominator.at(i) = The base denominator of advantage i. This, in turn, is pulled from "int main()"".
-                // stoi(CS.at(j).at(1)) = The desperation tier of player j.
-                    // In a previous function, each contestant's desperation tier was converted into the number it represents then turned back into a string. stoi() converts that string back into an integer so that we can do math with it.
+                // get<1>(CS.at(j)) = Player j's desperation tier value
             */
 
             /*
@@ -230,13 +229,13 @@ vector<vector<vector<unsigned int>>> Chance_Retriever(vector<vector<string>> AT,
                 Chances are multiplied by clue count (progression is 1, 2, 3, 4, and so on):
                     x = 1 + CC.at(j).at(2 * i);
                     Numerator_Pusher.push_back(x);
-                    x = Base_Denominator.at(i) * (1 + CC.at(j).at(2 * i)) * (0.25 * stoi(CS.at(j).at(1)));
+                    x = Base_Denominator.at(i) * (1 + CC.at(j).at(2 * i)) * (0.25 * get<1>(CS.at(j)));
                     Denominator_Pusher.push_back(x);
 
                 Every real clue doubles the chance while every fake clue halves it (progression is 1, 2, 4, 8, and so on):
                     x = pow(2, CC.at(j).at(2 * i));
                     Numerator_Pusher.push_back(x);
-                    x = Base_Denominator.at(i) * (1 + CC.at(j).at((2 * i) + 1)) * (0.25 * stoi(CS.at(j).at(1)));
+                    x = Base_Denominator.at(i) * (1 + CC.at(j).at((2 * i) + 1)) * (0.25 * get<1>(CS.at(j)));
                     Denominator_Pusher.push_back(x);
             */
 
@@ -246,12 +245,12 @@ vector<vector<vector<unsigned int>>> Chance_Retriever(vector<vector<string>> AT,
             Numerator_Pusher.push_back(x);
 
             // CUSTOM: This line of code controls the denominator part of the fraction that defines odds of finding advantage i.
-            // DEFAULT: round(1000 * Base_Denominator.at(i) * pow(CC.at(j).at((2 * i) + 1) + 1, 2) * pow(0.25, (0.25 * stoi(CS.at(j).at(1)))));
-            x = round(1000 * Base_Denominator.at(i) * pow(CC.at(j).at((2 * i) + 1) + 1, 2) * pow(0.25, (0.25 * stoi(CS.at(j).at(1)))));
+            // DEFAULT: round(1000 * Base_Denominator.at(i) * pow(CC.at(j).at((2 * i) + 1) + 1, 2) * pow(0.25, (0.25 * get<1>(CS.at(j)))));
+            x = round(1000 * Base_Denominator.at(i) * pow(CC.at(j).at((2 * i) + 1) + 1, 2) * pow(0.25, (0.25 * get<1>(CS.at(j)))));
             Denominator_Pusher.push_back(x);
         }
 
-        // Pushes the players' subvectors into the advantages' ones.
+        // Pushes the players' vectors into the advantages' vectors.
         True_Numerator.push_back(Numerator_Pusher);
         True_Denominator.push_back(Denominator_Pusher);
         Numerator_Pusher = {};
@@ -270,15 +269,14 @@ vector<vector<vector<unsigned int>>> Chance_Retriever(vector<vector<string>> AT,
         }
     }
 
-    F.push_back(True_Numerator);
-    F.push_back(True_Denominator);
+    get<0>(F) = True_Numerator;
+    get<1>(F) = True_Denominator;
     True_Numerator = {};
     True_Denominator = {};
     return F;
 }
 
-vector<vector<string>> PRNG_Handler(vector<vector<string>> AT, vector<vector<string>> CS, vector<vector<unsigned int>> CC, vector<vector<vector<unsigned int>>> F, vector<vector<string>> R, int S){
-    vector<vector<string>> Pusher_2D;
+vector<vector<string>> PRNG_Handler(vector<tuple<string, float>> AT, vector<tuple<string, float, string>> CS, vector<vector<unsigned int>> CC, tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> F, vector<vector<string>> R, int S){
     vector<string> Results_Pusher;
     vector<string> Advantage_Received_Pusher;
     vector<unsigned int> Factor; // Used to simplify fractions.
@@ -287,15 +285,15 @@ vector<vector<string>> PRNG_Handler(vector<vector<string>> AT, vector<vector<str
     PRNG_0.seed(S);
 
     // PRNG
-    for(int i = 0; i < F.at(0).size(); ++i){
-        for(int j = 0; j < F.at(0).at(0).size(); ++j){
+    for(int i = 0; i < get<0>(F).size(); ++i){
+        for(int j = 0; j < get<0>(F).at(0).size(); ++j){
             
             // The true PRNG.
-            int x = (PRNG_0() % F.at(1).at(i).at(j)) + 1;
+            int x = (PRNG_0() % get<1>(F).at(i).at(j)) + 1;
             Results_Pusher.push_back(to_string(x));
             
             // If x is less than or equal to the corresponding numerator, it's a "YES."
-            if(x <= F.at(0).at(i).at(j)){
+            if(x <= get<0>(F).at(i).at(j)){
                 Advantage_Received_Pusher.push_back("YES");
             }
             else{
@@ -311,27 +309,27 @@ vector<vector<string>> PRNG_Handler(vector<vector<string>> AT, vector<vector<str
     return R;
 }
 
-vector<string> Teams_Gatherer(vector<string> TN, vector<vector<string>> CS){
+vector<string> Teams_Gatherer(vector<string> TN, vector<tuple<string, float, string>> CS){
     // Automatically assign's the first contestant's team as a new one.
-    TN.push_back(CS.at(0).at(2));
+    TN.push_back(get<2>(CS.at(0)));
 
     // Gathers every present team name.
     for(int i = 0; i < CS.size(); ++i){
         bool New_Name = true;
         for(int j = 0; j < TN.size(); ++j){
-            if(CS.at(i).at(2) == TN.at(j)){
+            if(get<2>(CS.at(i)) == TN.at(j)){
                 New_Name = false;
             }
         }
         if(New_Name){
-            TN.push_back(CS.at(i).at(2));
+            TN.push_back(get<2>(CS.at(i)));
         }
     }
 
     return TN;
 }
 
-int Text_Output(vector<vector<string>> AT, vector<vector<string>> CS, vector<vector<vector<unsigned int>>> F, vector<vector<string>> R, vector<string> TN, string O){
+int Text_Output(vector<tuple<string, float>> AT, vector<tuple<string, float, string>> CS, tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> F, vector<vector<string>> R, vector<string> TN, string O){
     // Gets the output file.
     ofstream Results_File (O);
     
@@ -349,19 +347,19 @@ int Text_Output(vector<vector<string>> AT, vector<vector<string>> CS, vector<vec
         // For every contestant...
         for(int j = 0; j < CS.size(); ++j){
             
-            if(CS.at(j).at(2) == TN.at(i)){
+            if(get<2>(CS.at(j)) == TN.at(i)){
                 
                 // Writes the name of the player.
-                Results_File << CS.at(j).at(0) << ":" << endl;
+                Results_File << get<0>(CS.at(j)) << ":" << endl;
 
                 // For every advantage...
                 for(int k = 0; k < AT.size(); ++k){
 
                     // Writes the name of the advantage,
-                    Results_File << AT.at(k).at(0);
+                    Results_File << get<0>(AT.at(k));
 
                     // Bracket piece that has the fraction and the percent.
-                    Results_File << " [" << F.at(0).at(k).at(j) << "/" << F.at(1).at(k).at(j) << " (" << 100 * (float)F.at(0).at(k).at(j) / (float)F.at(1).at(k).at(j) << "%); "; // Advantage odds.
+                    Results_File << " [" << get<0>(F).at(k).at(j) << "/" << get<1>(F).at(k).at(j) << " (" << 100 * (float)get<0>(F).at(k).at(j) / (float)get<1>(F).at(k).at(j) << "%); "; // Advantage odds.
                     
                     // Bracket piece that has the results.
                     Results_File << R.at(k * 2).at(j) << " = " << R.at((k * 2) + 1).at(j) << "]" << endl; // Roll results.
@@ -379,20 +377,20 @@ int main(){
     
     // ___________________________________________________________________________________________________________________________________________________
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
-
-   // Input and output files.
+    
+    // Input and output files.
     string Input = "ExampleCast.txt";
     string Output = "ExampleResult.txt";
-
-   // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
-    vector<vector<string>> Advantage_Types = {
-        {"Immunity Idol", "100"},
-        {"Vote Pass", "50"}
+    
+    // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
+    vector<tuple<string, float>> Advantage_Types = {
+        {"Immunity Idol", 100},
+        {"Vote Pass", 50}
     };
     
     // Dictionary that maps the desperation tiers (2nd row of each contestant's slot in the input file) to integers.
-    // Base denominator will remain as the denominator post-calculations if a character has desperation tier 0 ("Comfy" in the default case) and no clues.
-    map<string, int> Desperation = {
+    // Base denominator will remain as the denominator post-calculations if a character has desperation tier 0 ("Comfy" in the default case) and no clues for that advantage.
+    map<string, float> Desperation = {
         {"Occupied", -2147483648},
         {"Comfy", 0},
         {"Unbothered", 1},
@@ -402,7 +400,7 @@ int main(){
     };
 
     int PPRNG_Seed = 010101;
-    // If you want to customize the math formula used for the RNG chances, that's in the function "Chance_Retriever." Press ctrl + f and type "CUSTOM."
+    // If you want to customize the math formula used for the RNG chances, that's in the function "Chance_Retriever." Press ctrl + f and type "CUSTOM:"
 
 
     /*
@@ -416,7 +414,7 @@ int main(){
         {"Vote Pass", "50"}
     };
 
-    map<string, int> Desperation = {
+    map<string, float> Desperation = {
         {"Occupied", -2147483648},
         {"Comfy", 0},
         {"Unbothered", 1},
@@ -432,10 +430,10 @@ int main(){
     // STUFF FOR YOU TO CUSTOMIZE ABOVE!!!
     // ___________________________________________________________________________________________________________________________________________________
     
-    unsigned int Slot_Size = (Advantage_Types.size() * 2) + 3; // Used for contestant slot sizes. Name = 1 slot, Desperation = 1 slot, 2x = 2 additional slots per advantage (x).
-    vector<vector<string>> Contestant_Stats; // 
-    vector<vector<unsigned int>> Clue_Counts; // Main: Players;   Sub: Clue Counts (all grouped together; evens are real, odds are fake).
-    vector<vector<vector<unsigned int>>> Fractions; // Main: Numerators/Denominators;   Sub: Advantages;   Subsub: Players
+    unsigned int Slot_Size = (Advantage_Types.size() * 2) + 3; // Used for contestant slot sizes. Name = 1 slot, Desperation = 1 slot, Team = 1 slot, 2x = 2 additional slots per advantage (x)
+    vector<tuple<string, float, string>> Contestant_Stats; // Main: Players;   Tuple: 0 = Name, 1 = Desperation Value, 2 = Team
+    vector<vector<unsigned int>> Clue_Counts; // Main: Players;   Sub: Clue Counts (all grouped together; evens are real, odds are fake)
+    tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> Fractions; // Tuple: Numerators/Denominators;   Sub: Advantages;   Subsub: Players
     vector<vector<string>> Results; // Main: Number + Y/N (Alternates Between the Two);   Sub: Advantage Rolls
     vector<string> Team_Names;
 
