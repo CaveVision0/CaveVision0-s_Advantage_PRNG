@@ -5,12 +5,12 @@ This program doesn't account for the existence of multiple copies of the same ad
 
 Example Format:
 [[Name]]    STRING
-[[Desperation Tier]]    SPECIFIC STRINGS (see advantage_roll.cpp's map for the strings; found in int main())
+[[Desperation Tier]]    SPECIFIC STRINGS (see advantage_roll.cpp's int main())
 [[Team Name]]    STRING
-[[Real Clues for Advantage 1]]    INT
-[[Fake Clues for Advantage 1]]    INT
-[[Real Clues for Advantage 2]]    INT
-[[Fake Clues for Advantage 2]]    INT
+[[Real Clues for Advantage 1]]    UNSIGNED INT (0 to 4294967295)
+[[Fake Clues for Advantage 1]]    UNSIGNED INT (0 to 4294967295)
+[[Real Clues for Advantage 2]]    UNSIGNED INT (0 to 4294967295)
+[[Fake Clues for Advantage 2]]    UNSIGNED INT (0 to 4294967295)
 [[Whitespace For Separation]]    STRING
 
 __START
