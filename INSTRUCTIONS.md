@@ -37,7 +37,7 @@ _Note: The variables seen below do not share the same names as the ones in the a
 The formula that I created for this program is ((r + 1) ^ 2) / (d * ((f + 1) ^ 2) * (0.25 ^ (0.25t))), with both sides of the calculated fraction multiplied by 1000 then rounded to the nearest integer.
 
 1. r = The amount of real clues a contestant is currently using. This increases the chance of the idol being found by the user.
-2. d = The base denominator. Each advantage has its own d value. This means that, assuming any given contestant has no chance modifiers of any kind and a desperation value of 0, they have a 1 in d chance of finding the advantage the d value represents.
+2. d = The base denominator. Each advantage has its own d value. Assuming any given contestant has no chance modifiers of any kind and a desperation value of 0, they have a 1 in d chance of finding the advantage the d value represents.
 3. f = The amount of fake clues a contestant is currently using. This decreases the chance of the idol being found by the user.
 4. t = The desperation tier a contestant has at that moment. The values for each tier are listed besides their titles.
 
