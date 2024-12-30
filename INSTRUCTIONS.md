@@ -1,6 +1,6 @@
 # HOW TO USE:
 
-**Input/Output Text Files:**
+# Input/Output Text Files:
 
 You'll need to create two text files. One is for the input and the other is for the output. An example of an input (ExampleCast.txt) is already provided, as is an example of a previously-generated output (ExampleResult.txt).
 
@@ -23,7 +23,7 @@ Notes:
 You're done with your input document now.
 
 
-**advantage_roll.cpp main int() Customization**
+# advantage_roll.cpp main int() Customization
 
 Open up advantage_roll.cpp and head to int main(). As soon as you're there, you'll be met with most of the things you can customize.
 
@@ -34,7 +34,7 @@ After that, there's vector<tuple<string, float>> Advantage_Types. New advantages
 Lastly, there's the desperation map. Here, you can create custom tier names and set their values. For example, if you want a tier named "AMAZING" and have its value be 5, you can add {"AMAZING", 5} into the map. **Be sure not to forget the comma at the end if the tier isn't the last one in the map!**
 
 
-**Formula Customization**
+# Formula Customization
 
 From there, if you press ctrl + f and type in "CUSTOM", you will see 2 results located in the Chance_Retriever function. This is where you want to be if you want to change the formula for the fractions' numerators and/or denominators. The program itself has explanations for the variables, functions, etc. you'll see in there and even provides 2 examples of custom formulas.
 
@@ -46,6 +46,6 @@ The formula that I created for this program is ((r + 1) ^ 2) / (d * ((f + 1) ^ 2
 3. f = The amount of fake clues a contestant is currently using. This decreases the chance of the idol being found by the user.
 4. t = The desperation tier a contestant has at that moment. The values for each tier are listed besides their titles.
 
-**The End**
+# The End
 
 That about covers it.
