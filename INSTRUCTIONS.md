@@ -35,7 +35,6 @@ Lastly, there's the desperation map. Here, you can create custom tier names and 
 
 From there, if you press ctrl + f and type in "CUSTOM", you will see 2 results located in the Chance_Retriever function. This is where you want to be if you want to change the formula for the fractions' numerators and/or denominators. The program itself has explanations for the variables, functions, etc. you'll see in there and even provides 2 examples of custom formulas.
 
-
 _Note: The variables seen below do not share the same names as the ones in the actual program. This is just a demonstration of my formula._
 The formula that I created for this program is ((r + 1) ^ 2) / (d * ((f + 1) ^ 2) * (0.25 ^ (0.25t))), with both sides of the calculated fraction multiplied by 1000 then rounded to the nearest integer.
 
