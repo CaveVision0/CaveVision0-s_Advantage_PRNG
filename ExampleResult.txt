@@ -32,3 +32,4 @@ Example7:
 Immunity Idol [4/25 (16%); 5 = no]
 Vote Pass [1/200 (0.5%); 37 = no]
 
+
