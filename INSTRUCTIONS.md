@@ -18,5 +18,6 @@ Between the __START and __END lines, create your cast by repeating the format be
 
 You're done with your input document now.
 
+
 **advantage_roll.cpp Customization**
-Open up advantage_roll.cpp.
+Open up advantage_roll.cpp and head to int main().
