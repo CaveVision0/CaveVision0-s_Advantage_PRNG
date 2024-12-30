@@ -284,10 +284,6 @@ vector<vector<string>> PRNG_Handler(vector<vector<string>> AT, vector<vector<str
     vector<unsigned int> Factor; // Used to simplify fractions.
     int x;
     mt19937 PRNG_0; // The random number generater. Who doesn't love a good mt19937?
-
-
-    // Seed will be XXYYZZ. X is the season number, Y is the episode, and Z is the nth time people are able to search this episode.
-    // For example, the first searching session of season 1, episode 1 is 010101.
     PRNG_0.seed(S);
 
     // PRNG
@@ -381,38 +377,21 @@ int Text_Output(vector<vector<string>> AT, vector<vector<string>> CS, vector<vec
 
 int main(){
     
+    // ___________________________________________________________________________________________________________________________________________________
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
-    // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
-    
-    /*
-    DEFAULT:
-        string Input = "ExampleCast.txt";
-        string Output = "ExampleResult.txt";
-    */
+
    // Input and output files.
     string Input = "ExampleCast.txt";
     string Output = "ExampleResult.txt";
 
-    /*
-    DEFAULT:
-        vector<vector<string>> Advantage_Types = {{"Immunity Idol", "100"}, {"Vote Pass", "50"}};
-    */
    // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
-    vector<vector<string>> Advantage_Types = {{"Immunity Idol", "100"}, {"Vote Pass", "50"}}; // Advantage and base denominator list.
-
-    /*
-    DEFAULT:
-        map<string, int> Desperation = {
-            {"Occupied", -2147483648},
-            {"Comfy", 0},
-            {"Unbothered", 1},
-            {"Concerned", 2},
-            {"Worried", 3},
-            {"Desperate", 4}
-        };
-    */
+    vector<vector<string>> Advantage_Types = {
+        {"Immunity Idol", "100"},
+        {"Vote Pass", "50"}
+    };
+    
     // Dictionary that maps the desperation tiers (2nd row of each contestant's slot in the input file) to integers.
-    // Base denominator will remain as the denominator post-calculations if a character has desperation tier 0 ("Comfy") and no clues.
+    // Base denominator will remain as the denominator post-calculations if a character has desperation tier 0 ("Comfy" in the default case) and no clues.
     map<string, int> Desperation = {
         {"Occupied", -2147483648},
         {"Comfy", 0},
@@ -422,15 +401,36 @@ int main(){
         {"Desperate", 4}
     };
 
-    /*
-    DEFAULT:
-        int PPRNG_Seed = 010101;
-    */
     int PPRNG_Seed = 010101;
     // If you want to customize the math formula used for the RNG chances, that's in the function "Chance_Retriever." Press ctrl + f and type "CUSTOM."
 
+
+    /*
+    DEFAULTS:
+
+    string Input = "ExampleCast.txt";
+    string Output = "ExampleResult.txt";
+    
+    vector<vector<string>> Advantage_Types = {
+        {"Immunity Idol", "100"},
+        {"Vote Pass", "50"}
+    };
+
+    map<string, int> Desperation = {
+        {"Occupied", -2147483648},
+        {"Comfy", 0},
+        {"Unbothered", 1},
+        {"Concerned", 2},
+        {"Worried", 3},
+        {"Desperate", 4}
+    };
+
+    int PPRNG_Seed = 010101;
+    */
+
+
     // STUFF FOR YOU TO CUSTOMIZE ABOVE!!!
-    // STUFF FOR YOU TO CUSTOMIZE ABOVE!!!
+    // ___________________________________________________________________________________________________________________________________________________
     
     unsigned int Slot_Size = (Advantage_Types.size() * 2) + 3; // Used for contestant slot sizes. Name = 1 slot, Desperation = 1 slot, 2x = 2 additional slots per advantage (x).
     vector<vector<string>> Contestant_Stats; // 
