@@ -19,10 +19,14 @@ Between the __START and __END lines, create your cast by repeating the format be
 
 You're done with your input document now.
 
-**advantage_roll.cpp Customization**
+**advantage_roll.cpp main int() Customization**
 
 Open up advantage_roll.cpp and head to int main(). As soon as you're there, you'll be met with most of the things you can customize.
 
 First, you'll replace string Input and string Output's files to your own. Which one being which is self explanatory. For example, if your input document is called This_Is_My_Doc.txt (file format is required), you'll replace ExampleCast.txt with that.
 
-After that, there's vector<vector<string>> Advantage_Types. New advantages should be formatted like this {"Advantage Name", "Base Denominator Number"} and placed inside the outer bracket, just as it appears in advantage_roll.cpp. If you want more than one advantage, just place a comma between each of these vectors like so: {"Advantage Name 1", "Base Denominator Number 1"}, {"Advantage Name 2", "Base Denominator Number 2"}.
+After that, there's vector<vector<string>> Advantage_Types. New advantages should be formatted like this {"Advantage Name", "Base Denominator Number"} and placed inside the outer bracket, just as it appears in advantage_roll.cpp. If you want more than one advantage, just place a comma between each of these vectors like this: {"Advantage Name 1", "Base Denominator Number 1"}, {"Advantage Name 2", "Base Denominator Number 2"}.
+
+Lastly, there's the desperation map. Here, you can create custom tier names and set their values. For example, if you want a tier named "AMAZING" and have its value be 5, you can add {"AMAZING", 5} into the map. **Be sure not to forget the comma at the end if this tier isn't the last one listed!**
+
+
