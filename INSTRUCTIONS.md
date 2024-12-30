@@ -8,13 +8,13 @@ Once you have your input doc, make your first line "__START" and your final line
 
 Between the __START and __END lines, create your cast by repeating the format below until every contestant has their own slot (ExampleCast.txt has an example of this should you want to see it). **Ignore everything that isn't inside double square brackets**:
 
-1. [[Name]]    STRING
-2. [[Desperation Tier]]    SPECIFIC STRINGS (see advantage_roll.cpp's int main())
-3. [[Team Name]]    STRING
-4. [[Real Clues for Advantage 1]]    UNSIGNED INT (0 to 4294967295)
-5. [[Fake Clues for Advantage 1]]    UNSIGNED INT (0 to 4294967295)
-6. [[Real Clues for Advantage 2]]    UNSIGNED INT (0 to 4294967295)
-7. [[Fake Clues for Advantage 2]]    UNSIGNED INT (0 to 4294967295)
+1. [[Name]] // STRING
+2. [[Desperation Tier]] // SPECIFIC STRINGS (see advantage_roll.cpp's int main())
+3. [[Team Name]] // STRING
+4. [[Real Clues for Advantage 1]] // UNSIGNED INT (0 to 4294967295)
+5. [[Fake Clues for Advantage 1]] // UNSIGNED INT (0 to 4294967295)
+6. [[Real Clues for Advantage 2]] // UNSIGNED INT (0 to 4294967295)
+7. [[Fake Clues for Advantage 2]] // UNSIGNED INT (0 to 4294967295)
 8. Whitespace for Contestant Separation    EMPTY STRING
 
 Notes:
