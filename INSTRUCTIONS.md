@@ -1,6 +1,7 @@
 # HOW TO USE:
 
 **Input/Output Text Files:**
+
 You'll need to create two text files. One is for the input and the other is for the output. An example of an input (ExampleCast.txt) is already provided, as is an example of a previously-generated output (ExampleResult.txt).
 
 Once you have your input doc, make your first line "__START" and your final line "__END" (quotation marks not included). This is used by the program to mark when it should start (__START) and stop (__END) gathering the contestant data. It's not a necessity that these are the very first/last lines and stuff can exist above __START or below __END, but the contestant data has to be between them.
@@ -20,4 +21,5 @@ You're done with your input document now.
 
 
 **advantage_roll.cpp Customization**
-Open up advantage_roll.cpp and head to int main().
+
+Open up advantage_roll.cpp and head to int main(). As soon as you're there, you'll be met with the things you can customize.
