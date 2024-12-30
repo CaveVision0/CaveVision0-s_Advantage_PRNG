@@ -11,7 +11,7 @@
 #include<vector> // Used for vectors.
 #include<random> // Used for the PRNG.
 #include<ctime> // Used for the PRNG's seeding.
-#include<tuple> // Used for the PRNG's seeding.
+#include<tuple> // Used for tuples.
 
 using namespace std;
 
