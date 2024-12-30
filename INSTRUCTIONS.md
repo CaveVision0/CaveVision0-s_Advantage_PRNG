@@ -14,8 +14,11 @@ Between the __START and __END lines, create your cast by repeating the format be
 4. [[Real Clues for Advantage 1]]    UNSIGNED INT (0 to 4294967295)
 5. [[Fake Clues for Advantage 1]]    UNSIGNED INT (0 to 4294967295)
 6. [[Real Clues for Advantage 2]]    UNSIGNED INT (0 to 4294967295)
-7. [[Fake Clues for Advantage 2]]    UNSIGNED INT (0 to 4294967295) (The amount of these unsigned int rows varies depending on how many advantages you have. Create 2 for each advantage).
-8. [[Whitespace For Separation]]    STRING
+7. [[Fake Clues for Advantage 2]]    UNSIGNED INT (0 to 4294967295)
+8. Whitespace for Contestant Separation    EMPTY STRING
+
+Notes:
+1. The amount of these unsigned int rows varies depending on how many advantages you have. Create 2 for each advantage. If you only have one advantage, you can delete the rows stated to be for advantage 2.
 
 You're done with your input document now.
 
@@ -26,9 +29,9 @@ Open up advantage_roll.cpp and head to int main(). As soon as you're there, you'
 
 First, you'll replace string Input and string Output's files with your own. For example, if your input document is called This_Is_My_Doc.txt, you'll replace ExampleCast.txt with that.
 
-After that, there's vector<vector<string>> Advantage_Types. New advantages should be formatted like this {"Advantage Name", "Base Denominator Number"} and placed inside the outer bracket, just as it appears in advantage_roll.cpp. If you want more than one advantage, just place a comma between each of these vectors like this: {"Advantage Name 1", "Base Denominator Number 1"}, {"Advantage Name 2", "Base Denominator Number 2"}.
+After that, there's vector<tuple<string, float>> Advantage_Types. New advantages should be formatted like this {"STRING", NUMBER} and placed inside the vector (AKA put it in the indented region), just as it appears in advantage_roll.cpp. **Be sure not to forget the comma at the end of each tuple if the advantage isn't the last one in the vector!**
 
-Lastly, there's the desperation map. Here, you can create custom tier names and set their values. For example, if you want a tier named "AMAZING" and have its value be 5, you can add {"AMAZING", 5} into the map. **Be sure not to forget the comma at the end if this tier isn't the last one listed!**
+Lastly, there's the desperation map. Here, you can create custom tier names and set their values. For example, if you want a tier named "AMAZING" and have its value be 5, you can add {"AMAZING", 5} into the map. **Be sure not to forget the comma at the end if the tier isn't the last one in the map!**
 
 
 **Formula Customization**
@@ -42,3 +45,7 @@ The formula that I created for this program is ((r + 1) ^ 2) / (d * ((f + 1) ^ 2
 2. d = The base denominator. Each advantage has its own d value. Assuming any given contestant has no chance modifiers of any kind and a desperation value of 0, they have a 1 in d chance of finding the advantage the d value represents.
 3. f = The amount of fake clues a contestant is currently using. This decreases the chance of the idol being found by the user.
 4. t = The desperation tier a contestant has at that moment. The values for each tier are listed besides their titles.
+
+**The End**
+
+That about covers it.
