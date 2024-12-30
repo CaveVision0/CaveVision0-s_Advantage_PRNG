@@ -19,7 +19,10 @@ Between the __START and __END lines, create your cast by repeating the format be
 
 You're done with your input document now.
 
-
 **advantage_roll.cpp Customization**
 
-Open up advantage_roll.cpp and head to int main(). As soon as you're there, you'll be met with the things you can customize.
+Open up advantage_roll.cpp and head to int main(). As soon as you're there, you'll be met with most of the things you can customize.
+
+First, you'll replace string Input and string Output's files to your own. Which one being which is self explanatory. For example, if your input document is called "This_Is_My_Doc.txt" (file format is required), you'll replace "ExampleCast.txt" with that.
+
+After that, there's
