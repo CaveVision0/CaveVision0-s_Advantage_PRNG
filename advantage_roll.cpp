@@ -279,27 +279,27 @@ vector<vector<string>> PRNG_Handler(vector<Advantage> AT, struct Contestant_Data
     return R;
 }
 
-vector<string> Teams_Gatherer(vector<string> TN, struct Contestant_Data CD){
+vector<string> Teams_Gatherer(vector<string> TN, vector<Contestant_Stats> S){
     // Automatically assign's the first contestant's team as a new one.
-    TN.push_back(CD.Stats.at(0).Team);
+    TN.push_back(S.at(0).Team);
 
     // Gathers every present team name.
-    for(int i = 0; i < CD.Stats.size(); ++i){
+    for(int i = 0; i < S.size(); ++i){
         bool New_Name = true;
         for(int j = 0; j < TN.size(); ++j){
-            if((CD.Stats.at(i).Team) == TN.at(j)){
+            if(S.at(i).Team == TN.at(j)){
                 New_Name = false;
             }
         }
         if(New_Name){
-            TN.push_back(CD.Stats.at(i).Team);
+            TN.push_back(S.at(i).Team);
         }
     }
 
     return TN;
 }
 
-int Text_Output(vector<Advantage> AT, struct Contestant_Data CD, tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> F, vector<vector<string>> R, vector<string> TN, string O){
+int Text_Output(vector<Advantage> AT, vector<Contestant_Stats> S, tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> F, vector<vector<string>> R, vector<string> TN, string O){
     // Gets the output file.
     ofstream Results_File (O);
     
@@ -315,12 +315,12 @@ int Text_Output(vector<Advantage> AT, struct Contestant_Data CD, tuple<vector<ve
         Results_File << "[TEAM: " << TN.at(i) << "]" << endl << endl;
 
         // For every contestant...
-        for(int j = 0; j < CD.Stats.size(); ++j){
+        for(int j = 0; j < S.size(); ++j){
             
-            if((CD.Stats.at(j).Team) == TN.at(i)){
+            if(S.at(j).Team == TN.at(i)){
                 
                 // Writes the name of the player.
-                Results_File << CD.Stats.at(j).Name << ":" << endl;
+                Results_File << S.at(j).Name << ":" << endl;
 
                 // For every advantage...
                 for(int k = 0; k < AT.size(); ++k){
@@ -416,7 +416,7 @@ int main(){
     cout << "Gathering results..." << endl;
     Results = PRNG_Handler(Advantage_Types, Data, Fractions, Results, PPRNG_Seed);
     cout << "Sorting contestants by team..." << endl;
-    Team_Names = Teams_Gatherer(Team_Names, Data);
+    Team_Names = Teams_Gatherer(Team_Names, Data.Stats);
     cout << "Porting to output document..." << endl;
-    Text_Output(Advantage_Types, Data, Fractions, Results, Team_Names, Output);
+    Text_Output(Advantage_Types, Data.Stats, Fractions, Results, Team_Names, Output);
 }
