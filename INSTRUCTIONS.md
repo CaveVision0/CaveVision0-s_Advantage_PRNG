@@ -24,7 +24,7 @@ You're done with your input document now.
 
 Open up advantage_roll.cpp and head to int main(). As soon as you're there, you'll be met with most of the things you can customize.
 
-First, you'll replace string Input and string Output's files to your own. Which one being which is self explanatory. For example, if your input document is called This_Is_My_Doc.txt (file format is required), you'll replace ExampleCast.txt with that.
+First, you'll replace string Input and string Output's files with your own. For example, if your input document is called This_Is_My_Doc.txt (file format is required), you'll replace ExampleCast.txt with that.
 
 After that, there's vector<vector<string>> Advantage_Types. New advantages should be formatted like this {"Advantage Name", "Base Denominator Number"} and placed inside the outer bracket, just as it appears in advantage_roll.cpp. If you want more than one advantage, just place a comma between each of these vectors like this: {"Advantage Name 1", "Base Denominator Number 1"}, {"Advantage Name 2", "Base Denominator Number 2"}.
 
