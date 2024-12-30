@@ -11,7 +11,7 @@ Example Format:
 [[Fake Clues for Advantage 1]]    UNSIGNED INT (0 to 4294967295)
 [[Real Clues for Advantage 2]]    UNSIGNED INT (0 to 4294967295)
 [[Fake Clues for Advantage 2]]    UNSIGNED INT (0 to 4294967295)
-[[Whitespace For Separation]]    STRING
+Whitespace For Separation    EMPTY STRING
 
 __START
 Example1
