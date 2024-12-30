@@ -1,6 +1,6 @@
-HOW TO USE:
+# HOW TO USE:
 
-Input/Output Text Files:
+**Input/Output Text Files:**
 
 You'll need to create two text files. One is for the input and the other is for the output. An example of an input (ExampleCast.txt) is already provided, as is an example of a previously-generated output (ExampleResult.txt).
 
