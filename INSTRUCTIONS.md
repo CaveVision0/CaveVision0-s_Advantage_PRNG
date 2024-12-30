@@ -18,7 +18,7 @@ Between the __START and __END lines, create your cast by repeating the format be
 8. Whitespace for Contestant Separation    EMPTY STRING
 
 Notes:
-1. The amount of these unsigned int rows varies depending on how many advantages you have. Create 2 for each advantage. If you only have one advantage, you can delete the rows stated to be for advantage 2.
+1. The amount of these unsigned int rows varies depending on how many advantages you have. Create 2 for each advantage. If you plan on having one advantage, you can delete the rows stated to be for advantage 2.
 
 You're done with your input document now.
 
