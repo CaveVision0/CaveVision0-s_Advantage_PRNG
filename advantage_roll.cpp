@@ -385,7 +385,7 @@ int main(){
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
     
     // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
-    vector<vector<string>> Advantage_Types = {{"Immunity Idol", "100"}, {"Vote Pass", "50"}}; // Advantage and fraction denominator list.
+    vector<vector<string>> Advantage_Types = {{"Immunity Idol", "100"}, {"Vote Pass", "50"}}; // Advantage and base denominator list.
     
     // Dictionary that maps the desperation tiers (2nd row of each contestant's slot in the input file) to integers.
     map<string, int> Desperation = {
