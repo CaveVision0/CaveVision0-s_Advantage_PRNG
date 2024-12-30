@@ -29,7 +29,7 @@ Open up advantage_roll.cpp and head to int main(). As soon as you're there, you'
 
 First, you'll replace string Input and string Output's files with your own. For example, if your input document is called This_Is_My_Doc.txt, you'll replace ExampleCast.txt with that.
 
-After that, there's vector<tuple<string, float>> Advantage_Types. New advantages should be formatted like this {"STRING", NUMBER} and placed inside the vector (AKA put it in the indented region), just as it appears in advantage_roll.cpp. **Be sure not to forget the comma at the end of each tuple if the advantage isn't the last one in the vector!**
+After that, there's vector<tuple<string, float>> Advantage_Types. Remember creating all those real and fake clue lines? This is where to go to change how many different advantages you have. New advantages should be formatted like this {"STRING", NUMBER} and placed inside the vector (AKA put it in the indented region), just as it appears in advantage_roll.cpp. **Be sure not to forget the comma at the end of each tuple if the advantage isn't the last one in the vector!**
 
 Lastly, there's the desperation map. Here, you can create custom tier names and set their values. For example, if you want a tier named "AMAZING" and have its value be 5, you can add {"AMAZING", 5} into the map. **Be sure not to forget the comma at the end if the tier isn't the last one in the map!**
 
