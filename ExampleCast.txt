@@ -1,4 +1,4 @@
-Hi! I haven't sorted out fixes for all the ways you could possibly bust this up yet so try to stick with a similar format to this!
+Hi! I haven't sorted out fixes for all the ways this could break so try to stick with a similar format to this!
 The number of integers below the desperation tier may vary depending on how many advantages you have. Go for (#Advantage_Types * 2).
 
 This program doesn't account for the existence of multiple copies of the same advantage. All it does is use RNG then tell you if someone found an advantage that exists.
