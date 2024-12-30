@@ -383,6 +383,9 @@ int main(){
     
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
+
+    string Input = "ExampleCast.txt";
+    string Output = "ExampleResult.txt";
     
     // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
     vector<vector<string>> Advantage_Types = {{"Immunity Idol", "100"}, {"Vote Pass", "50"}}; // Advantage and base denominator list.
@@ -396,9 +399,6 @@ int main(){
         {"Worried", 3},
         {"Desperate", 4}
     };
-
-    string Input = "ExampleCast.txt";
-    string Output = "ExampleResult.txt";
 
     int PPRNG_Seed = 010101;
 
