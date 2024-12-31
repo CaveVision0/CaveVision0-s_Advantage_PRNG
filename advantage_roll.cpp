@@ -364,8 +364,8 @@ int main(){
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
     
     // Input and output files.
-    string Input = "Chris-Crossed_Contestants_List.txt";
-    string Output = "Advantage_Roll_010101.rtf";
+    string Input = "ExampleCast.txt";
+    string Output = "ExampleResult.txt";
     
     // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
     // Base Denominator must be an integer from 1 to 4294967295. Don't use 0. We all know what happens when you divide by 0.
