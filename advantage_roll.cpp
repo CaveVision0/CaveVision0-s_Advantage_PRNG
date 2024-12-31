@@ -438,5 +438,5 @@ int main(){
     auto stop = high_resolution_clock::now(); // Tests how long the program takes to work. This is the stopping point. This isn't needed for anything, I just wanted to see how fast it runs.
     auto duration = duration_cast<microseconds>(stop - start);
     float seconds = (float)duration.count() / 1000000;
-    cout << "Time taken by function: " << seconds << " seconds" << endl;
+    cout << "Program duration: " << seconds << " seconds" << endl;
 }
