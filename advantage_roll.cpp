@@ -397,7 +397,7 @@ int main(){
     string Input = "ExampleCast.txt";
     string Output = "ExampleResult.txt";
     
-    vector<vector<string>> Advantage_Types = {
+    vector<Advantage> Advantage_Types = {
         {"Immunity Idol", "100"},
         {"Vote Pass", "50"}
     };
