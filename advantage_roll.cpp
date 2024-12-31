@@ -10,7 +10,6 @@
 #include<map> // Used for the desperation dictionary.
 #include<vector> // Used for vectors.
 #include<random> // Used for the PRNG.
-#include<ctime> // Used for the PRNG's seeding.
 #include<tuple> // Used for tuples.
 #include<chrono> // Used for me to track how long the program takes to run. It's not needed for anything important.
 
@@ -21,7 +20,10 @@ using namespace std::chrono; // Lets me use the features chrono has.
 // Additional data for whether or not there's only one in the entire game or if there's one per team.
 // The RTF will acknowledge if more than one person finds an advantage.
 // RTF text formatting.
-
+// Additional sorting styles.
+    // Alphabetical order
+    // YES/no
+    // Chance
 
 
 // Structs
@@ -38,9 +40,9 @@ struct Advantage{
 };
 
 struct Contestant_Data{
-    vector<Contestant_Stats> Stats; // Main: Players;   Tuple: 0 = Name, 1 = Desperation Value, 2 = Team
+    vector<Contestant_Stats> Stats; // Main: Players;   Struct: 0 = Name, 1 = Desperation Value, 2 = Team
     vector<vector<unsigned int>> Clue_Counts; // Main: Players;   Sub: Clue Counts (all grouped together; evens are real, odds are fake)
-    unsigned char Size = 3; // the amount of members inside struct Contestant_Stats.
+    unsigned char Size = 3; // the amount of members inside struct Contestant_Stats. I'm setting this manually for now.
 };
 
 
@@ -56,7 +58,7 @@ Contestant_Data Contestant_Handler(unsigned char SS, map<string, char> D, string
     unsigned int Counter = 0; // Counts up once per non-empty line. Used to know when to begin a new slot.
     unsigned int ID = 0; // Contestant ID numbers.
 
-    // Pulls up a .txt file listing every remaining contestant.
+    // Opens the input file.
     ifstream Contestant_List (I);
     
     // If the list can't open, the string listed in the loop will print out and nothing will be returned.
@@ -90,6 +92,7 @@ Contestant_Data Contestant_Handler(unsigned char SS, map<string, char> D, string
 
         // Desperation tier detector. Slot #2 of the aforementioned sub-vectors.
         else if(Counter % SS == 2 && !line.empty()){ 
+
             // Exception handling for invalid desperation tiers. Invalid tiers become "Unbothered" (AKA 1).
             try{
                 CS.Desperation_Value = D.at(line);
@@ -107,7 +110,7 @@ Contestant_Data Contestant_Handler(unsigned char SS, map<string, char> D, string
             CS = {};
         }
 
-        // CLUES
+        // Clue Detector.
         else if(Counting && Counter > 0 && (Counter % SS > CD.Size || Counter % SS == 0) && !line.empty()){
             // Exception handling for non-integer clue counts. Invalid values become 0s.
             try{
@@ -192,9 +195,9 @@ tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> Chance_Retriev
             t = CD.Stats.at(j).Desperation_Value;
 
             /*
-            // #include<cmath> functions for clarity:
-                // round(x) = Rounds x to the nearest integer.
-                // pow(x, y) = x to the power of y (AKA x^y).
+            #include<cmath> functions for clarity:
+                round(x) = Rounds x to the nearest integer.
+                pow(x, y) = x to the power of y (AKA x^y).
             */
 
             /*
@@ -236,6 +239,8 @@ tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> Chance_Retriev
 
         // For every player...
         for(int j = 0; j < True_Numerator.at(0).size(); ++j){
+
+            // Simplifies the fractions.
             Factor = gcd(True_Numerator.at(i).at(j),True_Denominator.at(i).at(j));
             True_Numerator.at(i).at(j) /= Factor;
             True_Denominator.at(i).at(j) /= Factor;
@@ -256,11 +261,10 @@ vector<vector<string>> PRNG_Handler(vector<Advantage> AT, struct Contestant_Data
     mt19937 PRNG_0; // The random number generater. Who doesn't love a good mt19937?
     PRNG_0.seed(S);
 
-    // PRNG
     for(int i = 0; i < get<0>(F).size(); ++i){
         for(int j = 0; j < get<0>(F).at(0).size(); ++j){
             
-            // The true PRNG.
+            // The PRNG.
             x = (PRNG_0() % get<1>(F).at(i).at(j)) + 1;
             Results_Pusher.push_back(to_string(x));
             
@@ -308,12 +312,12 @@ void Text_Output(vector<Advantage> AT, vector<Contestant_Stats> S, tuple<vector<
     // Gets the output file.
     ofstream Results_File (O);
     
+    // If the output file can't open, this says so.
     if(!Results_File){
         cout << "CAN'T OPEN OUTPUT!!!!!";
     }
 
     // Prints out to the output file.
-
     // For every team name (this sorts everyone into those groups)... 
     for(int i = 0; i < TN.size(); ++i){
         Results_File << "__________________________________________________________________" << endl;
@@ -322,6 +326,7 @@ void Text_Output(vector<Advantage> AT, vector<Contestant_Stats> S, tuple<vector<
         // For every contestant...
         for(int j = 0; j < S.size(); ++j){
             
+            // If the current player's listed team matches the one currently being searched for...
             if(S.at(j).Team == TN.at(i)){
                 
                 // Writes the name of the player.
@@ -336,7 +341,7 @@ void Text_Output(vector<Advantage> AT, vector<Contestant_Stats> S, tuple<vector<
                     // Bracket piece that has the fraction and the percent.
                     Results_File << " [" << get<0>(F).at(k).at(j) << "/" << get<1>(F).at(k).at(j) << " (" << 100 * (float)get<0>(F).at(k).at(j) / (float)get<1>(F).at(k).at(j) << "%); "; // Advantage odds.
                     
-                    // Bracket piece that has the results.
+                    // Bracket piece that has the results (YES/no).
                     Results_File << R.at(k * 2).at(j) << " = " << R.at((k * 2) + 1).at(j) << "]" << endl; // Roll results.
                 }
                 Results_File << endl;
@@ -359,8 +364,8 @@ int main(){
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
     
     // Input and output files.
-    string Input = "ExampleCast.txt";
-    string Output = "ExampleResult.txt";
+    string Input = "Chris-Crossed_Contestants_List.txt";
+    string Output = "Advantage_Roll_010101.rtf";
     
     // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
     // Base Denominator must be an integer from 1 to 4294967295. Don't use 0. We all know what happens when you divide by 0.
@@ -369,7 +374,7 @@ int main(){
         {"Vote Pass", 50}
     };
     
-    // Dictionary that maps the desperation tiers (2nd row of each contestant's slot in the input file) to integers.
+    // Map for the desperation tiers (2nd row of each contestant's slot in the input file).
     // Base denominator will remain as the denominator post-calculations if a character has desperation tier 0 ("Comfy" in the default case) and no clues for that advantage.
     // Desperation numbers have to be anywhere from -128 to 127.
     map<string, char> Desperation = {
@@ -416,7 +421,7 @@ int main(){
     struct Contestant_Data Data;
     unsigned char Slot_Size = (Advantage_Types.size() * 2) + Data.Size; // Used for contestant slot sizes. Name = 1 slot, Desperation = 1 slot, Team = 1 slot, 2x = 2 additional slots per advantage (x)
     tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> Fractions; // Tuple: Numerators/Denominators;   Sub: Advantages;   Subsub: Players
-    vector<vector<string>> Results; // Main: Number + Y/N (Alternates Between the Two);   Sub: Advantage Rolls
+    vector<vector<string>> Results; // Main: Number + Y/N (alternates between the two);   Sub: Advantage Rolls
     vector<string> Team_Names;
 
     cout << "Getting contestants..." << endl;
@@ -434,5 +439,4 @@ int main(){
     auto duration = duration_cast<microseconds>(stop - start);
     float seconds = (float)duration.count() / 1000000;
     cout << "Time taken by function: " << seconds << " seconds" << endl;
-    cout << sizeof(Advantage_Types) + sizeof(Data) + sizeof(Fractions) + sizeof(Results) + sizeof(Team_Names);
 }
