@@ -12,8 +12,10 @@
 #include<random> // Used for the PRNG.
 #include<ctime> // Used for the PRNG's seeding.
 #include<tuple> // Used for tuples.
+#include<chrono> // Used for me to track how long the program takes to run. It's not needed for anything important.
 
 using namespace std;
+using namespace std::chrono; // Lets me use the features chrono has.
 
 // TO DO LIST:
 // Additional data for whether or not there's only one in the entire game or if there's one per team.
@@ -26,26 +28,26 @@ using namespace std;
 
 struct Contestant_Stats{
     string Name;
-    float Desperation_Value;
+    char Desperation_Value;
     string Team;
 };
 
 struct Advantage{
     string Name;
-    float Base_Denominator;
+    unsigned int Base_Denominator;
 };
 
 struct Contestant_Data{
     vector<Contestant_Stats> Stats; // Main: Players;   Tuple: 0 = Name, 1 = Desperation Value, 2 = Team
     vector<vector<unsigned int>> Clue_Counts; // Main: Players;   Sub: Clue Counts (all grouped together; evens are real, odds are fake)
-    unsigned int Size = 3; // the amount of members inside struct Contestant_Stats.
+    unsigned char Size = 3; // the amount of members inside struct Contestant_Stats.
 };
 
 
 
 // Functions
 
-Contestant_Data Contestant_Handler(unsigned int SS, map<string, float> D, string I){
+Contestant_Data Contestant_Handler(unsigned char SS, map<string, char> D, string I){
     struct Contestant_Stats CS;
     struct Contestant_Data CD;
     string line;
@@ -109,7 +111,7 @@ Contestant_Data Contestant_Handler(unsigned int SS, map<string, float> D, string
         else if(Counting && Counter > 0 && (Counter % SS > CD.Size || Counter % SS == 0) && !line.empty()){
             // Exception handling for non-integer clue counts. Invalid values become 0s.
             try{
-                Clues_Pusher.push_back(stoul(line));
+                Clues_Pusher.push_back(stoi(line));
             }
             catch(const invalid_argument& ex){
                 cout << "Conversion Error: " << CD.Stats.at(ID - 1).Name << " has at least 1 non-integer clue counter! Invalid slot(s) will be automatically filled with 0s." << endl;
@@ -167,8 +169,9 @@ tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> Chance_Retriev
     vector<vector<unsigned int>> True_Denominator; // The denominator in the finished fractions.
     vector<unsigned int> Numerator_Pusher;
     vector<unsigned int> Denominator_Pusher;
-    int Factor; // Used to simplify fractions.
-    int Value, r, d, f, t;
+    unsigned int Factor; // Used to simplify fractions.
+    unsigned int Value, d, r, f;
+    int t;
 
     // For every advantage...
     for(int i = 0; i < AT.size(); ++i){
@@ -210,13 +213,13 @@ tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> Chance_Retriev
             */
 
             // CUSTOM: This line of code controls the numerator part of the fraction that defines odds of finding advantage i.
-            // DEFAULT: round(1000 * pow(r + 1, 2));
+            // DEFAULT: 1000 * pow(r + 1, 2);
             Value = 1000 * pow(r + 1, 2);
             Numerator_Pusher.push_back(Value);
 
             // CUSTOM: This line of code controls the denominator part of the fraction that defines odds of finding advantage i.
-            // DEFAULT: round(1000 * d * pow(f + 1, 2) * pow(0.25, 0.25 *t));
-            Value = 1000 * d * pow(f + 1, 2) * pow(0.25, 0.25 *t);
+            // DEFAULT: round(1000 * d * pow(f + 1, 2) * pow(0.25, 0.25 * t));
+            Value = round(1000 * d * pow(f + 1, 2) * pow(0.25, 0.25 * t));
             Denominator_Pusher.push_back(Value);
         }
 
@@ -249,7 +252,6 @@ tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> Chance_Retriev
 vector<vector<string>> PRNG_Handler(vector<Advantage> AT, struct Contestant_Data CD, tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> F, vector<vector<string>> R, int S){
     vector<string> Results_Pusher;
     vector<string> Advantage_Received_Pusher;
-    vector<unsigned int> Factor; // Used to simplify fractions.
     int x;
     mt19937 PRNG_0; // The random number generater. Who doesn't love a good mt19937?
     PRNG_0.seed(S);
@@ -259,7 +261,7 @@ vector<vector<string>> PRNG_Handler(vector<Advantage> AT, struct Contestant_Data
         for(int j = 0; j < get<0>(F).at(0).size(); ++j){
             
             // The true PRNG.
-            int x = (PRNG_0() % get<1>(F).at(i).at(j)) + 1;
+            x = (PRNG_0() % get<1>(F).at(i).at(j)) + 1;
             Results_Pusher.push_back(to_string(x));
             
             // If x is less than or equal to the corresponding numerator, it's a "YES."
@@ -280,12 +282,14 @@ vector<vector<string>> PRNG_Handler(vector<Advantage> AT, struct Contestant_Data
 }
 
 vector<string> Teams_Gatherer(vector<string> TN, vector<Contestant_Stats> S){
+    bool New_Name;
+    
     // Automatically assign's the first contestant's team as a new one.
     TN.push_back(S.at(0).Team);
 
     // Gathers every present team name.
     for(int i = 0; i < S.size(); ++i){
-        bool New_Name = true;
+        New_Name = true;
         for(int j = 0; j < TN.size(); ++j){
             if(S.at(i).Team == TN.at(j)){
                 New_Name = false;
@@ -299,7 +303,8 @@ vector<string> Teams_Gatherer(vector<string> TN, vector<Contestant_Stats> S){
     return TN;
 }
 
-int Text_Output(vector<Advantage> AT, vector<Contestant_Stats> S, tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> F, vector<vector<string>> R, vector<string> TN, string O){
+void Text_Output(vector<Advantage> AT, vector<Contestant_Stats> S, tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> F, vector<vector<string>> R, vector<string> TN, string O){
+    
     // Gets the output file.
     ofstream Results_File (O);
     
@@ -340,13 +345,15 @@ int Text_Output(vector<Advantage> AT, vector<Contestant_Stats> S, tuple<vector<v
     }
 
     Results_File.close();
-    return 0;
 }
 
 
 // int main()
 
 int main(){
+    
+    auto start = high_resolution_clock::now(); // Tests how long the program takes to work. This is the starting point.
+
 
     // ___________________________________________________________________________________________________________________________________________________
     // STUFF FOR YOU TO CUSTOMIZE BELOW!!!
@@ -356,6 +363,7 @@ int main(){
     string Output = "ExampleResult.txt";
     
     // Declares the possible advantages. The format for each advantage is {Name, Base Denominator}.
+    // Base Denominator must be an integer from 1 to 4294967295. Don't use 0. We all know what happens when you divide by 0.
     vector<Advantage> Advantage_Types = {
         {"Immunity Idol", 100},
         {"Vote Pass", 50}
@@ -363,8 +371,9 @@ int main(){
     
     // Dictionary that maps the desperation tiers (2nd row of each contestant's slot in the input file) to integers.
     // Base denominator will remain as the denominator post-calculations if a character has desperation tier 0 ("Comfy" in the default case) and no clues for that advantage.
-    map<string, float> Desperation = {
-        {"Occupied", -2147483648},
+    // Desperation numbers have to be anywhere from -128 to 127.
+    map<string, char> Desperation = {
+        {"Occupied", -128},
         {"Comfy", 0},
         {"Unbothered", 1},
         {"Concerned", 2},
@@ -372,9 +381,10 @@ int main(){
         {"Desperate", 4}
     };
 
-    int PPRNG_Seed = 010101;
-    // If you want to customize the math formula used for the RNG chances, that's in the function "Chance_Retriever." Press ctrl + f and type "CUSTOM:"
+    // PPRNG_Seed can be any integer from -2147483648 to 2147483647.
+    int PRNG_Seed = 010101;
 
+    // If you want to customize the math formula used for the RNG chances, that's in the function "Chance_Retriever." Press ctrl + f and type "CUSTOM:"
 
     /*
     DEFAULTS:
@@ -387,8 +397,8 @@ int main(){
         {"Vote Pass", "50"}
     };
 
-    map<string, float> Desperation = {
-        {"Occupied", -2147483648},
+    map<string, char> Desperation = {
+        {"Occupied", -128},
         {"Comfy", 0},
         {"Unbothered", 1},
         {"Concerned", 2},
@@ -404,7 +414,7 @@ int main(){
     // ___________________________________________________________________________________________________________________________________________________
 
     struct Contestant_Data Data;
-    unsigned int Slot_Size = (Advantage_Types.size() * 2) + Data.Size; // Used for contestant slot sizes. Name = 1 slot, Desperation = 1 slot, Team = 1 slot, 2x = 2 additional slots per advantage (x)
+    unsigned char Slot_Size = (Advantage_Types.size() * 2) + Data.Size; // Used for contestant slot sizes. Name = 1 slot, Desperation = 1 slot, Team = 1 slot, 2x = 2 additional slots per advantage (x)
     tuple<vector<vector<unsigned int>>, vector<vector<unsigned int>>> Fractions; // Tuple: Numerators/Denominators;   Sub: Advantages;   Subsub: Players
     vector<vector<string>> Results; // Main: Number + Y/N (Alternates Between the Two);   Sub: Advantage Rolls
     vector<string> Team_Names;
@@ -414,9 +424,15 @@ int main(){
     cout << "Doing the math..." << endl;
     Fractions = Chance_Retriever(Advantage_Types, Data, Fractions);
     cout << "Gathering results..." << endl;
-    Results = PRNG_Handler(Advantage_Types, Data, Fractions, Results, PPRNG_Seed);
+    Results = PRNG_Handler(Advantage_Types, Data, Fractions, Results, PRNG_Seed);
     cout << "Sorting contestants by team..." << endl;
     Team_Names = Teams_Gatherer(Team_Names, Data.Stats);
     cout << "Porting to output document..." << endl;
     Text_Output(Advantage_Types, Data.Stats, Fractions, Results, Team_Names, Output);
+
+    auto stop = high_resolution_clock::now(); // Tests how long the program takes to work. This is the stopping point. This isn't needed for anything, I just wanted to see how fast it runs.
+    auto duration = duration_cast<microseconds>(stop - start);
+    float seconds = (float)duration.count() / 1000000;
+    cout << "Time taken by function: " << seconds << " seconds" << endl;
+    cout << sizeof(Advantage_Types) + sizeof(Data) + sizeof(Fractions) + sizeof(Results) + sizeof(Team_Names);
 }
