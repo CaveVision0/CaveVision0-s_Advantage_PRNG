@@ -2,34 +2,36 @@ __________________________________________________________________
 [TEAM: Team 1]
 
 Example1:
-Immunity Idol [4/25 (16%); 9 = no]
-Vote Pass [1/50 (2%); 18 = no]
+Hidden Immunity Idol [4/25 (16%); 9 = no]
+Vote Pass [1/50 (2%); 34 = no]
 
 Example2:
-Immunity Idol [9/100 (9%); 84 = no]
-Vote Pass [8/25 (32%); 25 = no]
+Hidden Immunity Idol [9/100 (9%); 100 = no]
+Vote Pass [8/25 (32%); 20 = no]
 
-Example3:
-Immunity Idol [4/25 (16%); 25 = no]
-Vote Pass [2/25 (8%); 12 = no]
+Example6:
+Hidden Immunity Idol [4/25 (16%); 10 = no]
+Vote Pass [1/200 (0.5%); 2 = no]
 
 __________________________________________________________________
 [TEAM: Team 2]
 
 Example4:
-Immunity Idol [9/400 (2.25%); 45 = no]
-Vote Pass [18/25 (72%); 10 = YES]
+Hidden Immunity Idol [9/400 (2.25%); 380 = no]
+Vote Pass [18/25 (72%); 18 = YES]
 
 Example5:
-Immunity Idol [1/100 (1%); 62 = no]
-Vote Pass [2/25 (8%); 2 = YES]
-
-Example6:
-Immunity Idol [4/25 (16%); 6 = no]
-Vote Pass [1/200 (0.5%); 60 = no]
+Hidden Immunity Idol [1/100 (1%); 75 = no]
+Vote Pass [2/25 (8%); 12 = no]
 
 Example7:
-Immunity Idol [4/25 (16%); 5 = no]
+Hidden Immunity Idol [4/25 (16%); 10 = no]
 Vote Pass [1/200 (0.5%); 37 = no]
 
+__________________________________________________________________
+[TEAM: Team 3]
+
+Example3:
+Hidden Immunity Idol [4/25 (16%); 12 = no]
+Vote Pass [2/25 (8%); 6 = no]
 
